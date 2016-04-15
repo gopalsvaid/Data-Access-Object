@@ -13,10 +13,26 @@
 @end
 
 @implementation AppDelegate
-
+@synthesize objdata;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    self.objdata = [[DaoClass alloc]init];
+    self.objdata.daoArray = [[NSMutableArray alloc]init];
+    
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    documentsDirectory = [documentsDirectory stringByAppendingPathComponent:@""];
+    NSString *filePath = [documentsDirectory stringByAppendingPathComponent:[NSString stringWithFormat: @"USER_LOGGEDIN"]];
+    NSMutableData *pData = [[NSMutableData alloc]initWithContentsOfFile:filePath];
+    
+    if (pData !=nil) {
+        NSKeyedUnarchiver *unArchiver = [[NSKeyedUnarchiver alloc]initForReadingWithData:pData];
+        self.objdata = [[DaoClass alloc] initWithCoder:unArchiver];
+        [unArchiver finishDecoding];
+    }
+    
+    
     return YES;
 }
 
